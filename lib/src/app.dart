@@ -3,6 +3,7 @@ import 'package:flutter_clone_instgram/src/components/image_data.dart';
 import 'package:flutter_clone_instgram/src/controller/bottom_nav_controller.dart';
 import 'package:flutter_clone_instgram/src/pages/active_history.dart';
 import 'package:flutter_clone_instgram/src/pages/home.dart';
+import 'package:flutter_clone_instgram/src/pages/mypage.dart';
 import 'package:flutter_clone_instgram/src/pages/search.dart';
 import 'package:get/get.dart';
 
@@ -28,9 +29,7 @@ class App extends GetView<BottomNavController> {
               ),
               Container(),
               const ActiveHistory(),
-              Container(
-                child: Center(child: Text('MYPAGE')),
-              ),
+              const MyPage(),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
