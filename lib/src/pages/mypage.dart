@@ -2,22 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clone_instgram/src/components/avatar_widget.dart';
 import 'package:flutter_clone_instgram/src/components/image_data.dart';
 import 'package:flutter_clone_instgram/src/components/user_card.dart';
+import 'package:flutter_clone_instgram/src/controller/auth_controller.dart';
+import 'package:flutter_clone_instgram/src/controller/mypage_controller.dart';
+import 'package:get/get.dart';
 
-class MyPage extends StatefulWidget {
+class MyPage extends GetView<MypageController> {
   const MyPage({super.key});
-
-  @override
-  State<MyPage> createState() => _MyPageState();
-}
-
-class _MyPageState extends State<MyPage> with TickerProviderStateMixin {
-  late TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 2, vsync: this);
-  }
 
   Widget _statisticsOne(String titile, int value) {
     return Column(
@@ -38,40 +28,41 @@ class _MyPageState extends State<MyPage> with TickerProviderStateMixin {
   Widget _information() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AvatarWidget(
-                type: AvatarType.TYPE3,
-                thumbPath:
-                    'https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg',
-                size: 80,
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(child: _statisticsOne('Post', 15)),
-                    Expanded(child: _statisticsOne('Followers', 11)),
-                    Expanded(child: _statisticsOne('Follwing', 3)),
-                  ],
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AvatarWidget(
+                  type: AvatarType.TYPE3,
+                  thumbPath: controller.targetUser.value.thumbnail!,
+                  size: 80,
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10),
-          const Text(
-            '안녕하세요 개발하는남자 입니다. 구독과 좋아요 부탁드려요~!',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
+                SizedBox(width: 10),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(child: _statisticsOne('Post', 15)),
+                      Expanded(child: _statisticsOne('Followers', 11)),
+                      Expanded(child: _statisticsOne('Follwing', 3)),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          )
-        ],
+            SizedBox(height: 10),
+            Text(
+              controller.targetUser.value.description!,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -161,7 +152,7 @@ class _MyPageState extends State<MyPage> with TickerProviderStateMixin {
 
   Widget _tabMenu() {
     return TabBar(
-      controller: tabController,
+      controller: controller.tabController,
       indicatorColor: Colors.black,
       indicatorWeight: 1,
       tabs: [
@@ -179,21 +170,19 @@ class _MyPageState extends State<MyPage> with TickerProviderStateMixin {
 
   Widget _tabView() {
     return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 100,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 1,
-        mainAxisSpacing: 1,
-        crossAxisSpacing: 1
-      ),
-      itemBuilder :(BuildContext context, int index) {
-        return Container(
-          color: Colors.grey,
-        );
-      }
-    );
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: 100,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 1,
+            mainAxisSpacing: 1,
+            crossAxisSpacing: 1),
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            color: Colors.grey,
+          );
+        });
   }
 
   @override
@@ -202,12 +191,14 @@ class _MyPageState extends State<MyPage> with TickerProviderStateMixin {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        title: const Text(
-          '상돈',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.black,
+        title: Obx(
+          () => Text(
+            controller.targetUser.value.nickname!,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.black,
+            ),
           ),
         ),
         actions: [
