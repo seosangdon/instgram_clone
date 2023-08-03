@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clone_instgram/src/components/maessage_popup.dart';
+import 'package:flutter_clone_instgram/src/controller/upload_controller.dart';
 import 'package:flutter_clone_instgram/src/pages/upload.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,9 @@ class BottomNavController extends GetxController {
     var page = PageName.values[value];
     switch (page) {
       case PageName.UPLOAD:
-        Get.to(() => const Upload());
+        Get.to(() => Upload(), binding: BindingsBuilder(() {
+          Get.put(UploadController());
+        }));
         break;
       case PageName.HOME:
       case PageName.SEARCh:
@@ -45,7 +48,7 @@ class BottomNavController extends GetxController {
     if (bottomHistory.length == 1) {
       showDialog(
         context: Get.context!,
-        builder: (context) => MessagaePopup(
+        builder: (context) => MessagePopup(
           message: '종료하시겠습니까?',
           okCallback: () {
             exit(0);

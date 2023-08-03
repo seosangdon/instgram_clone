@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MessagaePopup extends StatelessWidget {
+class MessagePopup extends StatelessWidget {
   final String? title;
   final String? message;
   final Function()? okCallback;
   final Function()? cancelCallback;
 
-  MessagaePopup(
+  MessagePopup(
       {super.key,
       required this.title,
       required this.message,
